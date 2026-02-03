@@ -23,65 +23,71 @@ To write a C program to implement a symbol table.
 
 # PROGRAM:
 ```
-#include <stdio.h> 
-#include <ctype.h> 
+#include <stdio.h>
+#include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+
 #define MAX_EXPRESSION_SIZE 100
 
 int main() {
-int i = 0, j = 0, x = 0, n, flag = 0; 
-void *add[5];
-char b[MAX_EXPRESSION_SIZE], d[15], c, srch;
+	int i = 0, j = 0, x = 0, n, flag = 0,k;
+	char b[MAX_EXPRESSION_SIZE], d[15], c, srch;
 
-printf("Enter the Expression terminated by $: ");
-while ((c = getchar()) != '$' && i < MAX_EXPRESSION_SIZE - 1) { b[i++] = c;
-}
-b[i] = '\0'; // Null terminate the string n = i - 1;
+	printf("Enter the Expression terminated by $: ");
+	while ((c = getchar()) != '$' && i < MAX_EXPRESSION_SIZE - 1) {
+		b[i++] = c;
+	}
+	b[i] = '\0';
+	n = i - 1;
 
-printf("Given Expression: %s\n", b);
+	printf("\nGiven Expression: %s\n", b);
 
-printf("\nSymbol Table\n"); printf("Symbol\taddr\ttype\n");
+	printf("\nSymbol Table\n");
+	printf("Symbol\tType\t\tAddress\n");
 
-for (j = 0; j <= n; j++) { 
-    c = b[j];
-if (isalpha((unsigned char)c)) { 
-    if (j == n) {
-    void *p = malloc(sizeof(char)); add[x] = p;
-    d[x] = c; printf("%c\t%p\tidentifier\n", c, p);
-} else {
-char ch = b[j + 1];
-if (ch == '+' || ch == '-' || ch == '*' || ch == '=') { 
-    void *p = malloc(sizeof(char));
-    add[x] = p;
-    d[x] = c; 
-    printf("%c\t%p\tidentifier\n", c, p); 
-    x++;
-}
-}
-}
- 
-}
+	for (j = 0; j <= n; j++) {
+		c = b[j];
+		if (isalpha((unsigned char)c)) {
+			int alreadyExists = 0;
+			for (k = 0; k < x; k++) {
+				if (d[k] == c) {
+					alreadyExists = 1;
+					break;
+				}
+			}
 
-printf("\nThe symbol to be searched: "); srch = getchar();
-for (i = 0; i <= x; i++) { if (srch == d[i]) {
-printf("Symbol Found\n"); printf("%c@address%p\n", srch, add[i]); flag = 1;
-}
-}
+			if (!alreadyExists) {
+				d[x] = c;
+				printf("%c\tidentifier\t%p\n", c, (void*)&d[x]);
+				x++;
+			}
+		}
+	}
 
- if (flag == 0)
-    printf("Symbol Not Found\n");
+	// Clear input buffer
+	while ((c = getchar()) != '\n' && c != EOF);
 
- for (i = 0; i <= x; i++) {
-   free(add[i]);
- }
+	printf("\nEnter the symbol to search: ");
+	srch = getchar();
 
-return 0;
-    
+	for (i = 0; i < x; i++) {
+		if (srch == d[i]) {
+			printf("Symbol %c Found @ address %p\n", srch, (void*)&d[x]);
+			flag = 1;
+			break;
+		}
+	}
+	if (flag == 0)
+		printf("Symbol Not Found\n");
+
+	return 0;
 }
 ```
 # OUTPUT:
-<img width="801" height="338" alt="Screenshot 2026-01-22 211220" src="https://github.com/user-attachments/assets/fe6aa20f-15ba-4adb-8ba4-32eab5b0516d" />
+![WhatsApp Image 2026-02-03 at 9 15 18 AM](https://github.com/user-attachments/assets/6ca5bde5-b11c-4ff6-acd0-1567fa571207)
+![WhatsApp Image 2026-02-03 at 9 17 05 AM](https://github.com/user-attachments/assets/346d4322-e63b-4b93-a8c5-1229bfa5530b)
+
 
 # RESULT:
 
